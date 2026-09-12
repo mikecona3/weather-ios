@@ -1,10 +1,10 @@
-# Tornado Tracker
+# Weather App -> Tornado Tracker 
 
 A Python pipeline for detecting rotational (mesocyclone/TVS-like) signatures in
 NEXRAD Level II radar data, tracking storm cells over time, and projecting a
 short-term forward path with a shrinking uncertainty cone.
 
-## Reality check (read this first)
+## REALITY CHECK read this first)
 
 This is a nowcasting / decision-support tool, not a replacement for official
 NWS warnings. It cannot see a tornado directly — no radar can, due to beam
@@ -21,7 +21,6 @@ experimentation, learning, and (eventually) a supplementary display.
 
 ## Project layout
 
-```
 tornado_tracker/
 ├── README.md
 ├── requirements.txt
@@ -33,7 +32,7 @@ tornado_tracker/
 │   └── visualize.py         # Plot reflectivity, velocity, and detected rotation
 ├── main.py                  # CLI entry point that chains the above
 └── data/                    # Downloaded radar scans land here (gitignored)
-```
+
 
 ## Data source
 
@@ -45,10 +44,9 @@ upstate NY).
 
 ## Setup
 
-```bash
+bash
 pip install -r requirements.txt
 python main.py --station KBGM --mode latest
-```
 
 ## Status
 
@@ -66,3 +64,8 @@ This was scaffolded in a sandboxed environment without outbound access to
 AWS S3, so the live-fetch path is written and documented but not
 network-tested here. Test `fetch_nexrad.py` first thing when you run this
 locally — that's the one part relying on live network access to NOAA's bucket.
+
+*NOTE: This is not guaranteed to work at any time, it is an initial commit and a
+very early beta of future software. Since I am new to Swift/SwiftUI and iOS dev
+work in general this could malfunction at any time, please refer to local media
+or government media sites for official warnings/forecasting for severe weather. 
