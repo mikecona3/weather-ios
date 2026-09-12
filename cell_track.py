@@ -1,7 +1,9 @@
 """
-Storm cell identification (from reflectivity) and frame-to-frame tracking.
+This is the true beta - this is not guaranteed to work or function 
+correctly at any time. Please be advised.
+Storm cell identification with frame to frame tracking. 
 
-v1 approach: threshold reflectivity to find storm cores, label connected
+Approach: threshold reflectivity to find storm cores, label connected
 regions, compute centroids, then match centroids between consecutive scans
 by nearest-neighbor (with a max-jump distance to avoid matching unrelated
 cells). This is a simplified version of the same idea behind SCIT/TITAN
