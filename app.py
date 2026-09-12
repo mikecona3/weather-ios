@@ -1,13 +1,3 @@
-"""
-Minimal backend: wraps fetch_forecast.py and serves it as JSON for the
-frontend to consume. Also serves the frontend itself so you can run one
-process locally.
-
-Run:
-    python backend/app.py
-Then open http://localhost:5000
-"""
-
 import os
 import sys
 
