@@ -1,14 +1,3 @@
-"""
-Pull forecasts from the National Weather Service API (api.weather.gov).
-
-Free, no API key required. Two-step flow because NWS forecasts are issued
-per grid cell, not per lat/lon:
-  1. /points/{lat},{lon}  -> tells you which forecast office + grid cell covers that point
-  2. that response's `forecast` / `forecastHourly` URLs -> the actual forecast
-
-Docs: https://www.weather.gov/documentation/services-web-api
-"""
-
 import requests
 
 USER_AGENT = "tornado-tracker-weather-app (contact: replace-with-your-email@example.com)"
