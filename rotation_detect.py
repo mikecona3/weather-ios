@@ -1,3 +1,18 @@
+"""
+Basic rotation (TVS/mesocyclone-style) detection from radar velocity data.
+
+Approach: scan the radial velocity field for adjacent gate pairs (along the
+same range, neighboring azimuths) where velocity flips sign and the shear
+(difference) exceeds a threshold — the classic "couplet" signature of
+rotation. This is a simplified version of what NWS algorithms (like MDA/TDA)
+do; it's a reasonable v1 that can be replaced or supplemented with an ML
+classifier later.
+
+Caveat: gate-to-gate velocity couplets are a NECESSARY but not SUFFICIENT
+condition for tornadic rotation — plenty of non-tornadic shear produces
+similar signatures. Treat detections as "candidate," not "confirmed."
+"""
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -20,7 +35,15 @@ def find_velocity_couplets(
     shear_threshold_ms: float = 25.0,
     max_gate_separation: int = 4,
 ) -> list[RotationCandidate]:
-    
+    """
+    Scan one sweep's velocity field for rotation couplets.
+
+    shear_threshold_ms: minimum |v_in| + |v_out| across the couplet to flag.
+        25 m/s (~56 mph combined shear) is a starting point — tune against
+        known cases for your radar/region.
+    max_gate_separation: how many azimuth gates apart the in/out pair can be
+        and still count as one couplet (accounts for beam smearing).
+    """
     vel_field = radar.get_field(sweep, "velocity")
     azimuths = radar.get_azimuth(sweep)
     ranges = radar.range["data"]

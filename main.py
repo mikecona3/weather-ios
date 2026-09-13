@@ -1,3 +1,12 @@
+#!/usr/bin/env python3
+"""
+CLI entry point for the tornado tracker pipeline.
+
+Examples:
+    python main.py --station KBGM --mode latest
+    python main.py --station KTLX --mode latest --dbz-threshold 35 --shear-threshold 20
+"""
+
 import argparse
 import os
 import sys

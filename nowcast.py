@@ -1,3 +1,15 @@
+"""
+Short-term motion extrapolation with an uncertainty cone that shrinks as
+lead time decreases (i.e., the projection for "5 minutes from now" is much
+tighter than "30 minutes from now") and tightens overall as more scans
+confirm a stable motion vector.
+
+This does NOT replace NWS tornado warning polygons, which incorporate
+storm-scale NWP guidance, environmental shear/instability, and forecaster
+judgment. This is pure trajectory extrapolation from observed radar motion —
+useful for short lead times (0-15 min), unreliable beyond that.
+"""
+
 from dataclasses import dataclass
 
 import numpy as np
@@ -19,7 +31,17 @@ def project_path(
     base_uncertainty_km: float = 1.5,
     growth_km_per_min: float = 0.6,
 ) -> list[PathProjection]:
-    
+    """
+    Extrapolate a tracked cell's position forward using its most recent
+    motion vector, with uncertainty radius growing linearly with lead time.
+
+    Tightening vs. a generic cone comes from two things this uses that a
+    climatological polygon doesn't:
+      1. The cell's *actual observed* velocity (not a average tornado speed)
+      2. `growth_km_per_min` can be tuned down as track history lengthens
+         (a motion vector confirmed across 4+ scans is more trustworthy
+         than one from 2 scans) — see `confidence_factor` below.
+    """
     velocity = track.velocity_kmh()
     if velocity is None:
         return []
@@ -52,6 +74,12 @@ def project_path(
 
 
 def confidence_factor(track: TrackedCell, full_confidence_scans: int = 5) -> float:
+    """
+    Scale factor applied to the uncertainty radius based on how many
+    consecutive scans have confirmed this track's motion. More history =
+    tighter cone (down to 1.0x at full_confidence_scans+), fresh tracks
+    (2 scans, the minimum to compute velocity) get a wider 1.8x cone.
+    """
     n = len(track.history)
     if n >= full_confidence_scans:
         return 1.0

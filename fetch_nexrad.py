@@ -1,3 +1,14 @@
+"""
+Fetch NEXRAD Level II radar scans from NOAA's public AWS S3 bucket.
+
+Bucket: noaa-nexrad-level2 (public, no credentials required)
+Layout: s3://noaa-nexrad-level2/YYYY/MM/DD/STATION/STATION_YYYYMMDD_HHMMSS_V06
+
+Station codes: 4-letter NEXRAD site IDs, e.g. KBGM (Binghamton, NY),
+KTLX (Twin Lakes / OKC), KTYX (Montague, NY / western NY / Great Lakes).
+Full list: https://www.roc.noaa.gov/branches/program-branch/support-branch/wsr-88d-radar-locations
+"""
+
 import os
 from datetime import datetime, timedelta, timezone
 
@@ -58,6 +69,7 @@ def fetch_at(station: str, when: datetime) -> str:
 
 
 def fetch_range(station: str, start: datetime, end: datetime) -> list[str]:
+    """Download all scans for a station between two UTC datetimes. Returns local paths."""
     paths = []
     day = start
     while day.date() <= end.date():

@@ -1,3 +1,8 @@
+"""
+Plot reflectivity and velocity from a radar volume, with detected rotation
+candidates overlaid.
+"""
+
 import matplotlib.pyplot as plt
 import pyart
 
